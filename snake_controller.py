@@ -9,12 +9,15 @@ class SnakeController():
     
     def play(self):
 
-        while True:
-            self.view.fps.tick(SNAKE_SPEED)
-            event = self.view.get_events()
+        running = True
 
+        while running:
+            self.view.fps.tick(SNAKE_SPEED)
+            event = self.view.get_event()
+            
             self.model.update_model(event)
-            self.view.draw_screen(self.model.snake, (self.model.fruit_x, self.model.fruit_y))
+
+            self.view.draw_screen(self.model.snake, (self.model.fruit_x, self.model.fruit_y), self.model.score)
 
 def main():
     model = SnakeModel()

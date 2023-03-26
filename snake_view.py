@@ -15,13 +15,14 @@ class SnakeView():
         self.display = pygame.display.set_mode(board)
         self.fps = pygame.time.Clock()
 
+        self.font = pygame.font.SysFont("arial", 50)
+
         pygame.display.set_caption("Snake")
 
-    def get_events(self):
+    def get_event(self) -> str:
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                quit()
+            if event.type == 32787:
+                self.quit_game()
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
@@ -35,13 +36,21 @@ class SnakeView():
                 
             return "DEFAULT"
 
+    def draw_score(self, score):
+        surface = self.font.render(f"Score: {score}", True, WHITE)
+        self.display.blit(surface, [0, 0])
+
+    def quit_game(self):
+        pygame.quit()
+        quit()
+
     def test_draw_screen(self):
         self.display.fill(RED)
 
-    def draw_screen(self, snake, fruit):
+    def draw_screen(self, snake, fruit, score):
         self.display.fill(BLACK)
 
-        # (snake_x, snake_y) = snake
+        self.draw_score(score)
 
         for (snake_x, snake_y) in snake:
             pygame.draw.rect(self.display, GREEN, 
@@ -49,7 +58,7 @@ class SnakeView():
         
         (fruit_x, fruit_y) = fruit
 
-        pygame.draw.rect(self.display, WHITE, 
+        pygame.draw.rect(self.display, RED, 
                          pygame.Rect(fruit_x, fruit_y, BLOCK_SIZE, BLOCK_SIZE))
         
         pygame.display.update()
