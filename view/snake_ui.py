@@ -1,6 +1,6 @@
 class UI():
 
-    def __init__(self, width, height) -> None:
+    def __init__(self, width, height, snake_speed) -> None:
         pass
 
     def get_event(self) -> str:

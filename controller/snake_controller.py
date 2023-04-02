@@ -1,14 +1,15 @@
 from model.snake_model import SnakeModel
-from view.snake_gui import UI, GUI
+from view.snake_ui import UI
 
-WIDTH = 20
-HEIGHT = 20
+
 
 class SnakeController():
-    def __init__(self, model: SnakeModel, view: UI) -> None:
+    def __init__(self, model: SnakeModel, view: UI, width: int, height: int) -> None:
         self.model = model
         self.view = view
-    
+        self.width = width
+        self.height = height
+
     def play(self):
 
         while True:
@@ -23,17 +24,7 @@ class SnakeController():
             event = self.view.get_game_over_event()
 
             if event == "RESTART":
-                self.model = SnakeModel(WIDTH, HEIGHT)
+                self.model = SnakeModel(self.width, self.height)
                 self.play()
 
             self.view.draw_game_over(self.model.get_score())
-
-def main():
-    model = SnakeModel(WIDTH, HEIGHT)
-    view = GUI(WIDTH, HEIGHT)
-    snake = SnakeController(model, view)
-
-    snake.play()
-
-
-if __name__ == "__main__": main() 

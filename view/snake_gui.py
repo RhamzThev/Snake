@@ -1,8 +1,7 @@
 import pygame
-from snake_ui import UI
+from view.snake_ui import UI
 
 BLOCK_SIZE = 30
-SNAKE_SPEED = 60
 
 WHITE = pygame.Color(255, 255, 255)
 BLACK = pygame.Color(0, 0, 0)
@@ -12,11 +11,13 @@ GREEN = pygame.Color(0, 255, 0)
 BLUE = pygame.Color(0, 0, 255)
 
 class GUI(UI):
-    def __init__(self, width, height) -> None:
+    def __init__(self, width, height, snake_speed) -> None:
         pygame.init()
 
         self.__width = width
         self.__height = height
+
+        self.__snake_speed = snake_speed
 
         self.display = pygame.display.set_mode((width * BLOCK_SIZE, height * BLOCK_SIZE))
         self.fps = pygame.time.Clock()
@@ -64,7 +65,7 @@ class GUI(UI):
         self.display.blit(surface, rect)
 
     def draw_screen(self, snake, fruit, score):
-        self.fps.tick(SNAKE_SPEED)
+        self.fps.tick(self.__snake_speed)
         self.display.fill(BLACK)
 
         self.draw_score(score)
@@ -92,24 +93,30 @@ class GUI(UI):
                     event.key != pygame.K_LEFT): return "RESTART"
 
     def draw_game_over(self, score):
-        self.fps.tick(SNAKE_SPEED)
+        self.fps.tick(self.__snake_speed)
         self.display.fill(BLACK)
 
         display_width = self.display.get_width()
 
         # your final score
         final_score_surface = self.heading_one.render(f"Final Score: {score}", True, WHITE)
+
         final_score_width = final_score_surface.get_width()
         final_score_height = final_score_surface.get_height()
+
         final_score_padding = (self.__height * BLOCK_SIZE) // 3
+
         final_score_rect = (self.__center(display_width, final_score_width), final_score_padding)
         
         self.display.blit(final_score_surface, final_score_rect)
 
         # press any button
-        press_surface = self.heading_two.render(f"Press any button to restart", True, WHITE)
+        press_surface = self.heading_two.render("Press any button to restart", True, WHITE)
+
         press_width = press_surface.get_width()
+
         press_padding = final_score_padding + final_score_height + (final_score_padding // 6)
+
         press_rect = (self.__center(display_width, press_width), press_padding)
 
         self.display.blit(press_surface, press_rect)
