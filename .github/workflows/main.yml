@@ -6,8 +6,21 @@ on:
       - master
 
 jobs:
-  build-linux:
-    runs-on: ubuntu-latest
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        include:
+          - os: ubuntu-latest
+            artifact_name: snake-linux
+          - os: windows-latest
+            artifact_name: snake-windows
+            additional_packages: windows-curses
+          - os: macos-latest
+            artifact_name: snake-macos
+
+    runs-on: ${{ matrix.os }}
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -19,70 +32,20 @@ jobs:
 
     - name: Install requirements
       run: |
-        pip install pygame pyinstaller
+        pip install pygame pyinstaller ${{ matrix.additional_packages || '' }}
 
-    - name: Build Linux executable
+    - name: Build executable
       run: |
         pyinstaller --onefile main.py --noconsole -y
 
-    - name: Upload Linux build artifact
+    - name: Upload build artifact
       uses: actions/upload-artifact@v4
       with:
-        name: snake-linux
-        path: dist/
-
-  build-windows:
-    runs-on: windows-latest
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-    
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: "3.12.1"
-
-    - name: Install requirements
-      run: |
-        pip install pygame pyinstaller windows-curses
-
-    - name: Build Windows executable
-      run: |
-        pyinstaller --onefile main.py --noconsole -y
-
-    - name: Upload Windows build artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: snake-windows
-        path: dist/
-
-  build-macos:
-    runs-on: macos-latest
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-    
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: "3.12.1"
-
-    - name: Install requirements
-      run: |
-        pip install pygame pyinstaller
-
-    - name: Build macOS executable
-      run: |
-        pyinstaller --onefile --windowed main.py -y
-
-    - name: Upload macOS build artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: snake-macos
+        name: ${{ matrix.artifact_name }}
         path: dist/
 
   release:
-    needs: [build-linux, build-windows, build-macos]
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -112,6 +75,6 @@ jobs:
           gh release create v1.1.0 \
             ./dist/linux/main --title "Linux Executable" --notes "Automated release of Linux executable." \
             ./dist/windows/main.exe --title "Windows Executable" --notes "Automated release of Windows executable." \
-            ./dist/macos/main.app --title "macOS Executable" --notes "Automated release of macOS executable."
+            ./dist/macos/main --title "macOS Executable" --notes "Automated release of macOS executable."
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
