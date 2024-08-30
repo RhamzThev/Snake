@@ -108,6 +108,7 @@ jobs:
           
       - name: Create GitHub Release
         run: |
+          ls -l ./dist/macos/
           gh release create v1.1.0 \
             ./dist/linux/main --title "Linux Executable" --notes "Automated release of Linux executable." \
             ./dist/windows/main.exe --title "Windows Executable" --notes "Automated release of Windows executable." \
