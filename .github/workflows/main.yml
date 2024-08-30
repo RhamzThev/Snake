@@ -19,7 +19,7 @@ jobs:
 
     - name: Install requirements
       run: |
-        pip install -r requirements.txt
+        pip install pygame pyinstaller
 
     - name: Build executable
       run: |
