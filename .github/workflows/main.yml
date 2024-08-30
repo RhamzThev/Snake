@@ -9,15 +9,13 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest, windows-latest]
         include:
           - os: ubuntu-latest
             artifact_name: snake-linux
           - os: windows-latest
             artifact_name: snake-windows
             additional_packages: windows-curses
-          - os: macos-latest
-            artifact_name: snake-macos
 
     runs-on: ${{ matrix.os }}
 
@@ -62,19 +60,11 @@ jobs:
         with:
           name: snake-windows
           path: dist/windows/
-
-      - name: Download macOS build artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: snake-macos
-          path: dist/macos/
           
       - name: Create GitHub Release
         run: |
-          ls -l ./dist/macos/
           gh release create v1.1.0 \
             ./dist/linux/main --title "Linux Executable" --notes "Automated release of Linux executable." \
-            ./dist/windows/main.exe --title "Windows Executable" --notes "Automated release of Windows executable." \
-            ./dist/macos/main --title "macOS Executable" --notes "Automated release of macOS executable."
+            ./dist/windows/main.exe --title "Windows Executable" --notes "Automated release of Windows executable."
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
