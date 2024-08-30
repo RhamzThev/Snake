@@ -63,8 +63,6 @@ jobs:
           
       - name: Create GitHub Release
         run: |
-          gh release create v1.1.0 \
-            ./dist/linux/main --title "Linux Executable" --notes "Automated release of Linux executable." \
-            ./dist/windows/main.exe --title "Windows Executable" --notes "Automated release of Windows executable."
+          gh release create v1.2.0 ./dist/linux/main ./dist/windows/main.exe --title "Snake v1.2.0" --notes "Automated release of Linux (main) and Windows (main.exe) executables."
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
