@@ -47,6 +47,6 @@ jobs:
           
       - name: Create GitHub Release
         run: |
-          gh release create v1.0.0 ./dist/main --title "Python Executable Release" --notes "Automated release of Python executable."
+          gh release create v1.0.0 ./dist/main.exe --title "Python Executable Release" --notes "Automated release of Python executable."
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
