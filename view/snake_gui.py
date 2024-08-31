@@ -2,6 +2,18 @@ import sys
 import pygame
 from view.snake_ui import UI
 
+import os
+
+
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
+
 BLOCK_SIZE = 30
 
 WHITE = pygame.Color(255, 255, 255)
@@ -11,10 +23,13 @@ YELLOW = pygame.Color(255, 255, 0)
 GREEN = pygame.Color(0, 255, 0)
 BLUE = pygame.Color(0, 0, 255)
 
+ICON = pygame.image.load(resource_path("./assets/favicon.ico"))
+
 
 class GUI(UI):
     def __init__(self, width, height, snake_speed) -> None:
         pygame.init()
+        pygame.display.set_icon(ICON)
 
         self.__width = width
         self.__height = height

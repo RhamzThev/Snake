@@ -8,6 +8,7 @@ HEIGHT = 20
 
 SNAKE_SPEED = 15
 
+
 def main():
     model = SnakeModel(WIDTH, HEIGHT)
     view = GUI(WIDTH, HEIGHT, SNAKE_SPEED)
@@ -16,4 +17,5 @@ def main():
     snake.play()
 
 
-if __name__ == "__main__": main()  
+if __name__ == "__main__":
+    main()

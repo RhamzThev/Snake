@@ -34,7 +34,7 @@ jobs:
 
     - name: Build executable
       run: |
-        pyinstaller --onefile main.py --noconsole -y
+        pyinstaller main.py -F -w -y -i ./assets/favicon.ico --add-data './assets:./assets'
 
     - name: Upload build artifact
       uses: actions/upload-artifact@v4
@@ -63,6 +63,6 @@ jobs:
           
       - name: Create GitHub Release
         run: |
-          gh release create v1.2.0 ./dist/linux/main ./dist/windows/main.exe --title "Snake v1.2.0" --notes "Automated release of Linux (main) and Windows (main.exe) executables."
+          gh release create v1.3.0 ./dist/linux/main ./dist/windows/main.exe --title "Snake v1.3.0" --notes "Update: Added an icon the the executables."
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
